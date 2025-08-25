@@ -33,6 +33,15 @@
   }
 }
 
+/* Comet Card 3D Effects */
+.perspective-distant {
+  perspective: 1000px;
+}
+
+.transform-3d {
+  transform-style: preserve-3d;
+}
+
 @layer base {
   :root {
     /* Rose Pine Light Theme */

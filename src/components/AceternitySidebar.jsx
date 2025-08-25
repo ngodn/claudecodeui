@@ -24,7 +24,9 @@ import {
   RefreshCw, 
   Edit2, 
   Star, 
-  Search 
+  Search,
+  User,
+  Shuffle 
 } from 'lucide-react';
 
 import ClaudeLogo from './ClaudeLogo';
@@ -510,6 +512,52 @@ const VersionUpdateNotification = ({ onShowVersionModal, latestVersion }) => {
   );
 };
 
+// Teammate Display Component
+const TeammateDisplay = ({ selectedTeammate, onChangeTeammate }) => {
+  const { open } = useSidebar();
+
+  if (!selectedTeammate) return null;
+
+  const handleChangeTeammate = () => {
+    // Clear the teammate selection to trigger the teammate selection screen
+    localStorage.removeItem('selectedTeammate');
+    if (onChangeTeammate) {
+      onChangeTeammate();
+    } else {
+      // Fallback - refresh the page to show teammate selection
+      window.location.reload();
+    }
+  };
+
+  return (
+    <motion.div
+      animate={{
+        opacity: open ? 1 : 0,
+        height: open ? "auto" : 0,
+        marginBottom: open ? "16px" : 0,
+      }}
+      className="border border-border rounded-lg p-3 bg-accent/30 overflow-hidden"
+    >
+      {open && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <div className="text-lg">{selectedTeammate.avatar}</div>
+            <div className="flex-1 min-w-0">
+              <h4 className="text-sm font-medium text-foreground truncate">
+                {selectedTeammate.name}
+              </h4>
+              <p className="text-xs text-muted-foreground truncate">
+                {selectedTeammate.specialty}
+              </p>
+            </div>
+          </div>
+          
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
 // Settings Component
 const SidebarSettings = ({ onShowSettings }) => {
   const links = [
@@ -547,7 +595,8 @@ function AceternitySidebar(props) {
     updateAvailable,
     latestVersion,
     currentVersion,
-    onShowVersionModal
+    onShowVersionModal,
+    selectedTeammate
   } = props;
 
   // All your existing state

@@ -27,6 +27,7 @@ import MainContent from './components/MainContent';
 import MobileNav from './components/MobileNav';
 import ToolsSettings from './components/ToolsSettings';
 import QuickSettingsPanel from './components/QuickSettingsPanel';
+import TeammateSelection from './components/TeammateSelection';
 
 import { useWebSocket } from './utils/websocket';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -69,6 +70,10 @@ function AppContent() {
   const [sendByCtrlEnter, setSendByCtrlEnter] = useState(() => {
     const saved = localStorage.getItem('sendByCtrlEnter');
     return saved !== null ? JSON.parse(saved) : false;
+  });
+  const [selectedTeammate, setSelectedTeammate] = useState(() => {
+    const saved = localStorage.getItem('selectedTeammate');
+    return saved ? JSON.parse(saved) : null;
   });
   // Canvas Protection System: Track canvases with active conversations to prevent
   // automatic project updates from interrupting ongoing chats. When a user sends
@@ -460,6 +465,13 @@ function AppContent() {
     }
   };
 
+  // Handle teammate selection
+  const handleTeammateSelection = (teammate) => {
+    setSelectedTeammate(teammate);
+    localStorage.setItem('selectedTeammate', JSON.stringify(teammate));
+    navigate('/');
+  };
+
   // Version Upgrade Modal Component
   const VersionUpgradeModal = () => {
     if (!showVersionModal) return null;
@@ -546,6 +558,11 @@ function AppContent() {
     );
   };
 
+  // Show teammate selection if no teammate is selected
+  if (!selectedTeammate) {
+    return <TeammateSelection onSelectTeammate={handleTeammateSelection} />;
+  }
+
   return (
     <div className="fixed inset-0 flex bg-background">
       {/* Fixed Desktop Sidebar */}
@@ -566,6 +583,7 @@ function AppContent() {
           latestVersion={latestVersion}
           currentVersion={currentVersion}
           onShowVersionModal={() => setShowVersionModal(true)}
+          selectedTeammate={selectedTeammate}
         />
       )}
 
@@ -587,6 +605,7 @@ function AppContent() {
           latestVersion={latestVersion}
           currentVersion={currentVersion}
           onShowVersionModal={() => setShowVersionModal(true)}
+          selectedTeammate={selectedTeammate}
         />
       )}
 
@@ -613,6 +632,7 @@ function AppContent() {
           showRawParameters={showRawParameters}
           autoScrollToBottom={autoScrollToBottom}
           sendByCtrlEnter={sendByCtrlEnter}
+          selectedTeammate={selectedTeammate}
         />
       </div>
 
@@ -676,6 +696,7 @@ function App() {
             <Routes>
               <Route path="/" element={<AppContent />} />
               <Route path="/session/:sessionId" element={<AppContent />} />
+              <Route path="/teammates" element={<AppContent />} />
             </Routes>
           </Router>
         </ProtectedRoute>

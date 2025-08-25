@@ -3014,7 +3014,7 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                   Select a provider to start a new conversation
                 </p>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 justify-center items-center mb-8 max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 justify-center items-center mb-8 max-w-2xl mx-auto">
                   {/* Claude Button */}
                   <button
                     onClick={() => {
