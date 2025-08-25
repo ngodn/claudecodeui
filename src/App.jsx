@@ -1,21 +1,23 @@
 /*
- * App.jsx - Main Application Component with Session Protection System
+ * App.jsx - Main Application Component with Canvas Protection System
  * 
- * SESSION PROTECTION SYSTEM OVERVIEW:
- * ===================================
+ * CANVAS PROTECTION SYSTEM OVERVIEW:
+ * ==================================
  * 
  * Problem: Automatic project updates from WebSocket would refresh the sidebar and clear chat messages
  * during active conversations, creating a poor user experience.
  * 
- * Solution: Track "active sessions" and pause project updates during conversations.
+ * Solution: Track "active canvases" and pause project updates during conversations.
  * 
  * How it works:
- * 1. When user sends message → session marked as "active" 
- * 2. Project updates are skipped while session is active
- * 3. When conversation completes/aborts → session marked as "inactive"
+ * 1. When user sends message → canvas marked as "active" 
+ * 2. Project updates are skipped while canvas is active
+ * 3. When conversation completes/aborts → canvas marked as "inactive"
  * 4. Project updates resume normally
  * 
- * Handles both existing sessions (with real IDs) and new sessions (with temporary IDs).
+ * Handles both existing canvases (with real IDs) and new canvases (with temporary IDs).
+ * 
+ * Note: Internally still uses "session" terminology for API compatibility.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -37,14 +39,14 @@ import { api, authenticatedFetch } from './utils/api';
 // Main App component with routing
 function AppContent() {
   const navigate = useNavigate();
-  const { sessionId } = useParams();
+  const { sessionId } = useParams(); // Note: URL param still "sessionId" for API compatibility - represents canvasId
   
   const { updateAvailable, latestVersion, currentVersion } = useVersionCheck('siteboon', 'claudecodeui');
   const [showVersionModal, setShowVersionModal] = useState(false);
   
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [selectedSession, setSelectedSession] = useState(null);
+  const [selectedSession, setSelectedSession] = useState(null); // Note: represents selectedCanvas for API compatibility
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'files'
   const [isMobile, setIsMobile] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -68,11 +70,12 @@ function AppContent() {
     const saved = localStorage.getItem('sendByCtrlEnter');
     return saved !== null ? JSON.parse(saved) : false;
   });
-  // Session Protection System: Track sessions with active conversations to prevent
+  // Canvas Protection System: Track canvases with active conversations to prevent
   // automatic project updates from interrupting ongoing chats. When a user sends
-  // a message, the session is marked as "active" and project updates are paused
+  // a message, the canvas is marked as "active" and project updates are paused
   // until the conversation completes or is aborted.
-  const [activeSessions, setActiveSessions] = useState(new Set()); // Track sessions with active conversations
+  // Note: Variable name kept as "activeSessions" for API compatibility - represents active canvases
+  const [activeSessions, setActiveSessions] = useState(new Set()); // Track canvases with active conversations
   
   const { ws, sendMessage, messages } = useWebSocket();
 
@@ -92,11 +95,12 @@ function AppContent() {
     fetchProjects();
   }, []);
 
-  // Helper function to determine if an update is purely additive (new sessions/projects)
+  // Helper function to determine if an update is purely additive (new canvases/projects)
   // vs modifying existing selected items that would interfere with active conversations
+  // Note: Function parameters use "session" terminology for API compatibility - represents canvas data
   const isUpdateAdditive = (currentProjects, updatedProjects, selectedProject, selectedSession) => {
     if (!selectedProject || !selectedSession) {
-      // No active session to protect, allow all updates
+      // No active canvas to protect, allow all updates
       return true;
     }
 
@@ -109,16 +113,17 @@ function AppContent() {
       return false;
     }
 
-    // Find the selected session in both current and updated project data
+    // Find the selected canvas in both current and updated project data
+    // Note: using "session" variable names for API compatibility
     const currentSelectedSession = currentSelectedProject.sessions?.find(s => s.id === selectedSession.id);
     const updatedSelectedSession = updatedSelectedProject.sessions?.find(s => s.id === selectedSession.id);
 
     if (!currentSelectedSession || !updatedSelectedSession) {
-      // Selected session was deleted or significantly changed, not purely additive
+      // Selected canvas was deleted or significantly changed, not purely additive
       return false;
     }
 
-    // Check if the selected session's content has changed (modification vs addition)
+    // Check if the selected canvas's content has changed (modification vs addition)
     // Compare key fields that would affect the loaded chat interface
     const sessionUnchanged = 
       currentSelectedSession.id === updatedSelectedSession.id &&
@@ -126,8 +131,8 @@ function AppContent() {
       currentSelectedSession.created_at === updatedSelectedSession.created_at &&
       currentSelectedSession.updated_at === updatedSelectedSession.updated_at;
 
-    // This is considered additive if the selected session is unchanged
-    // (new sessions may have been added elsewhere, but active session is protected)
+    // This is considered additive if the selected canvas is unchanged
+    // (new canvases may have been added elsewhere, but active canvas is protected)
     return sessionUnchanged;
   };
 
@@ -138,11 +143,12 @@ function AppContent() {
       
       if (latestMessage.type === 'projects_updated') {
         
-        // Session Protection Logic: Allow additions but prevent changes during active conversations
-        // This allows new sessions/projects to appear in sidebar while protecting active chat messages
-        // We check for two types of active sessions:
-        // 1. Existing sessions: selectedSession.id exists in activeSessions
-        // 2. New sessions: temporary "new-session-*" identifiers in activeSessions (before real session ID is received)
+        // Canvas Protection Logic: Allow additions but prevent changes during active conversations
+        // This allows new canvases/projects to appear in sidebar while protecting active chat messages
+        // We check for two types of active canvases:
+        // 1. Existing canvases: selectedSession.id exists in activeSessions
+        // 2. New canvases: temporary "new-session-*" identifiers in activeSessions (before real canvas ID is received)
+        // Note: using "session" variable names for API compatibility
         const hasActiveSession = (selectedSession && activeSessions.has(selectedSession.id)) ||
                                  (activeSessions.size > 0 && Array.from(activeSessions).some(id => id.startsWith('new-session-')));
         
@@ -251,24 +257,24 @@ function AppContent() {
   // Expose fetchProjects globally for component access
   window.refreshProjects = fetchProjects;
 
-  // Handle URL-based session loading
+  // Handle URL-based canvas loading (Note: still uses "session" in URL for API compatibility)
   useEffect(() => {
     if (sessionId && projects.length > 0) {
       // Only switch tabs on initial load, not on every project update
       const shouldSwitchTab = !selectedSession || selectedSession.id !== sessionId;
-      // Find the session across all projects
+      // Find the canvas across all projects (Note: variable still called "session" for API compatibility)
       for (const project of projects) {
         let session = project.sessions?.find(s => s.id === sessionId);
         if (session) {
           setSelectedProject(project);
           setSelectedSession({ ...session, __provider: 'claude' });
-          // Only switch to chat tab if we're loading a different session
+          // Only switch to chat tab if we're loading a different canvas
           if (shouldSwitchTab) {
             setActiveTab('chat');
           }
           return;
         }
-        // Also check Cursor sessions
+        // Also check Cursor canvases (Note: still called "sessions" for API compatibility)
         const cSession = project.cursorSessions?.find(s => s.id === sessionId);
         if (cSession) {
           setSelectedProject(project);
@@ -280,9 +286,9 @@ function AppContent() {
         }
       }
       
-      // If session not found, it might be a newly created session
+      // If canvas not found, it might be a newly created canvas
       // Just navigate to it and it will be found when the sidebar refreshes
-      // Don't redirect to home, let the session load naturally
+      // Don't redirect to home, let the canvas load naturally
     }
   }, [sessionId, projects, navigate]);
 
@@ -295,19 +301,20 @@ function AppContent() {
     }
   };
 
+  // Handle canvas selection (Note: function name uses "session" for API compatibility)
   const handleSessionSelect = (session) => {
     setSelectedSession(session);
-    // Only switch to chat tab when user explicitly selects a session
+    // Only switch to chat tab when user explicitly selects a canvas
     // This prevents tab switching during automatic updates
     if (activeTab !== 'git' && activeTab !== 'preview') {
       setActiveTab('chat');
     }
     
-    // For Cursor sessions, we need to set the session ID differently
-    // since they're persistent and not created by Claude
+    // For Cursor canvases, we need to set the canvas ID differently
+    // since they're persistent and not created by Claude (Note: still uses "session" for API compatibility)
     const provider = localStorage.getItem('selected-provider') || 'claude';
     if (provider === 'cursor') {
-      // Cursor sessions have persistent IDs
+      // Cursor canvases have persistent IDs
       sessionStorage.setItem('cursorSessionId', session.id);
     }
     
@@ -317,6 +324,7 @@ function AppContent() {
     navigate(`/session/${session.id}`);
   };
 
+  // Handle new canvas creation (Note: function name uses "session" for API compatibility)
   const handleNewSession = (project) => {
     setSelectedProject(project);
     setSelectedSession(null);
@@ -327,8 +335,9 @@ function AppContent() {
     }
   };
 
+  // Handle canvas deletion (Note: function name uses "session" for API compatibility)
   const handleSessionDelete = (sessionId) => {
-    // If the deleted session was currently selected, clear it
+    // If the deleted canvas was currently selected, clear it
     if (selectedSession?.id === sessionId) {
       setSelectedSession(null);
       navigate('/');

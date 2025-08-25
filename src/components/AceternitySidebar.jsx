@@ -106,7 +106,7 @@ const SidebarActions = ({ onRefresh, onNewProject, isRefreshing }) => {
               }
             }}
             disabled={isRefreshing}
-            title="Refresh projects and sessions"
+            title="Refresh projects and canvases"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''} group-hover:rotate-180 transition-transform duration-300`} />
           </Button>
@@ -341,7 +341,7 @@ const ProjectItem = ({
   );
 };
 
-// Sessions List Component  
+// Canvases List Component (Note: internally still called "sessions" for API compatibility)
 const SessionsList = ({ 
   project, 
   isExpanded, 
@@ -367,14 +367,14 @@ const SessionsList = ({
       className="ml-4 mt-2 space-y-1 border-l border-border pl-4"
     >
       {sessions.length === 0 ? (
-        <p className="text-xs text-muted-foreground py-2">No sessions yet</p>
+        <p className="text-xs text-muted-foreground py-2">No canvases yet</p>
       ) : (
         sessions.map((session) => {
           const isCursorSession = session.__provider === 'cursor';
           const sessionDate = new Date(isCursorSession ? session.createdAt : session.lastActivity);
           const diffInMinutes = Math.floor((currentTime - sessionDate) / (1000 * 60));
           const isActive = diffInMinutes < 10;
-          const sessionName = isCursorSession ? (session.name || 'Untitled Session') : (session.summary || 'New Session');
+          const sessionName = isCursorSession ? (session.name || 'Untitled Canvas') : (session.summary || 'New Canvas');
           const sessionTime = isCursorSession ? session.createdAt : session.lastActivity;
           const messageCount = session.messageCount || 0;
 
@@ -429,7 +429,7 @@ const SessionsList = ({
                 )}
               </motion.div>
               
-              {/* Delete button for Claude sessions */}
+              {/* Delete button for Claude canvases */}
               {!isCursorSession && open && (
                 <motion.button
                   initial={{ opacity: 0 }}
@@ -448,7 +448,7 @@ const SessionsList = ({
         })
       )}
       
-      {/* New Session Button */}
+      {/* New Canvas Button */}
       <motion.div
         animate={{
           opacity: open ? 1 : 0,
@@ -464,7 +464,7 @@ const SessionsList = ({
             onClick={() => onNewSession(project)}
           >
             <Plus className="w-3 h-3" />
-            New Session
+            New Canvas
           </Button>
         )}
       </motion.div>
@@ -557,6 +557,7 @@ function AceternitySidebar(props) {
   const [editingName, setEditingName] = useState('');
   const [newProjectPath, setNewProjectPath] = useState('');
   const [creatingProject, setCreatingProject] = useState(false);
+  // State management (Note: "sessions" terminology kept for API compatibility - these represent "canvases")
   const [loadingSessions, setLoadingSessions] = useState({});
   const [additionalSessions, setAdditionalSessions] = useState({});
   const [initialSessionsLoaded, setInitialSessionsLoaded] = useState(new Set());
@@ -674,6 +675,7 @@ function AceternitySidebar(props) {
     return starredProjects.has(projectName);
   };
 
+  // Function to get all canvases (Note: called "sessions" for API compatibility)
   const getAllSessions = (project) => {
     const claudeSessions = [...(project.sessions || []), ...(additionalSessions[project.name] || [])].map(s => ({ ...s, __provider: 'claude' }));
     const cursorSessions = (project.cursorSessions || []).map(s => ({ ...s, __provider: 'cursor' }));
@@ -741,8 +743,9 @@ function AceternitySidebar(props) {
     setEditingName('');
   };
 
+  // Delete canvas function (Note: API still uses "session" terminology)
   const deleteSession = async (projectName, sessionId) => {
-    if (!confirm('Are you sure you want to delete this session? This action cannot be undone.')) {
+    if (!confirm('Are you sure you want to delete this canvas? This action cannot be undone.')) {
       return;
     }
 
@@ -753,12 +756,12 @@ function AceternitySidebar(props) {
           onSessionDelete(sessionId);
         }
       } else {
-        console.error('Failed to delete session');
-        alert('Failed to delete session. Please try again.');
+        console.error('Failed to delete canvas');
+        alert('Failed to delete canvas. Please try again.');
       }
     } catch (error) {
-      console.error('Error deleting session:', error);
-      alert('Error deleting session. Please try again.');
+      console.error('Error deleting canvas:', error);
+      alert('Error deleting canvas. Please try again.');
     }
   };
 
@@ -907,7 +910,7 @@ function AceternitySidebar(props) {
                 </div>
                 <h3 className="text-base font-medium text-foreground mb-1">Loading projects...</h3>
                 <p className="text-sm text-muted-foreground">
-                  Fetching your Claude projects and sessions
+                  Fetching your Claude projects and canvases
                 </p>
               </div>
             ) : projects.length === 0 ? (

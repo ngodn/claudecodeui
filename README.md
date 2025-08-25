@@ -4,7 +4,7 @@
 </div>
 
 
-A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and [Cursor CLI](https://docs.cursor.com/en/cli/overview). You can use it locally or remotely to view your active projects and sessions in Claude Code or Cursor and make changes to them from everywhere (mobile or desktop). This gives you a proper interface that works everywhere. Supports models including **Claude Sonnet 4**, **Opus 4.1**, and **GPT-5**
+A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), and [Cursor CLI](https://docs.cursor.com/en/cli/overview). You can use it locally or remotely to view your active projects and canvases in Claude Code or Cursor and make changes to them from everywhere (mobile or desktop). This gives you a proper interface that works everywhere. Supports models including **Claude Sonnet 4**, **Opus 4.1**, and **GPT-5**
 
 ## Screenshots
 
@@ -46,7 +46,7 @@ A desktop and mobile UI for [Claude Code](https://docs.anthropic.com/en/docs/cla
 - **Integrated Shell Terminal** - Direct access to Claude Code or Cursor CLI through built-in shell functionality
 - **File Explorer** - Interactive file tree with syntax highlighting and live editing
 - **Git Explorer** - View, stage and commit your changes. You can also switch branches 
-- **Session Management** - Resume conversations, manage multiple sessions, and track history
+- **Canvas Management** - Resume conversations, manage multiple canvases, and track history
 - **Model Compatibility** - Works with Claude Sonnet 4, Opus 4.1, and GPT-5
 
 
@@ -115,15 +115,15 @@ To use Claude Code's full functionality, you'll need to manually enable tools:
 
 #### Project Management
 The UI automatically discovers Claude Code projects from `~/.claude/projects/` and provides:
-- **Visual Project Browser** - All available projects with metadata and session counts
+- **Visual Project Browser** - All available projects with metadata and canvas counts
 - **Project Actions** - Rename, delete, and organize projects
-- **Smart Navigation** - Quick access to recent projects and sessions
+- **Smart Navigation** - Quick access to recent projects and canvases
 - **MCP support** - Add your own MCP servers through the UI 
 
 #### Chat Interface
 - **Use responsive chat or Claude Code/Cursor CLI** - You can either use the adapted chat interface or use the shell button to connect to your selected CLI. 
 - **Real-time Communication** - Stream responses from Claude with WebSocket connection
-- **Session Management** - Resume previous conversations or start fresh sessions
+- **Canvas Management** - Resume previous conversations or start fresh canvases
 - **Message History** - Complete conversation history with timestamps and metadata
 - **Multi-format Support** - Text, code blocks, and file references
 
@@ -136,11 +136,11 @@ The UI automatically discovers Claude Code projects from `~/.claude/projects/` a
 #### Git Explorer
 
 
-#### Session Management
-- **Session Persistence** - All conversations automatically saved
-- **Session Organization** - Group sessions by project and timestamp
-- **Session Actions** - Rename, delete, and export conversation history
-- **Cross-device Sync** - Access sessions from any device
+#### Canvas Management
+- **Canvas Persistence** - All conversations automatically saved
+- **Canvas Organization** - Group canvases by project and timestamp
+- **Canvas Actions** - Rename, delete, and export conversation history
+- **Cross-device Sync** - Access canvases from any device
 
 ### Mobile App
 - **Responsive Design** - Optimized for all screen sizes
@@ -164,7 +164,7 @@ The UI automatically discovers Claude Code projects from `~/.claude/projects/` a
 - **Express Server** - RESTful API with static file serving
 - **WebSocket Server** - Communication for chats and project refresh
 - **CLI Integration (Claude Code / Cursor)** - Process spawning and management
-- **Session Management** - JSONL parsing and conversation persistence
+- **Canvas Management** - JSONL parsing and conversation persistence
 - **File System API** - Exposing file browser for projects
 
 ### Frontend (React + Vite)

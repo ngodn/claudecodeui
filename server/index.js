@@ -36,6 +36,7 @@ import pty from 'node-pty';
 import fetch from 'node-fetch';
 import mime from 'mime-types';
 
+// Canvas Management: Functions handle "canvases" (conversation threads) but use "session" terminology for API compatibility
 import { getProjects, getSessions, getSessionMessages, renameProject, deleteSession, deleteProject, addProjectManually, extractProjectDirectory, clearProjectDirectoryCache } from './projects.js';
 import { spawnClaude, abortClaudeSession } from './claude-cli.js';
 import { spawnCursor, abortCursorSession } from './cursor-cli.js';
@@ -205,6 +206,7 @@ app.get('/api/projects', authenticateToken, async (req, res) => {
     }
 });
 
+// Get canvases for a project (Note: API endpoint still uses "sessions" for compatibility)
 app.get('/api/projects/:projectName/sessions', authenticateToken, async (req, res) => {
     try {
         const { limit = 5, offset = 0 } = req.query;
@@ -215,7 +217,7 @@ app.get('/api/projects/:projectName/sessions', authenticateToken, async (req, re
     }
 });
 
-// Get messages for a specific session
+// Get messages for a specific canvas (Note: API endpoint still uses "session" for compatibility)
 app.get('/api/projects/:projectName/sessions/:sessionId/messages', authenticateToken, async (req, res) => {
     try {
         const { projectName, sessionId } = req.params;
@@ -251,7 +253,7 @@ app.put('/api/projects/:projectName/rename', authenticateToken, async (req, res)
     }
 });
 
-// Delete session endpoint
+// Delete canvas endpoint (Note: API endpoint still uses "session" for compatibility)
 app.delete('/api/projects/:projectName/sessions/:sessionId', authenticateToken, async (req, res) => {
     try {
         const { projectName, sessionId } = req.params;
@@ -477,24 +479,24 @@ function handleChatConnection(ws) {
             if (data.type === 'claude-command') {
                 console.log('💬 User message:', data.command || '[Continue/Resume]');
                 console.log('📁 Project:', data.options?.projectPath || 'Unknown');
-                console.log('🔄 Session:', data.options?.sessionId ? 'Resume' : 'New');
+                console.log('🔄 Canvas:', data.options?.sessionId ? 'Resume' : 'New');
                 await spawnClaude(data.command, data.options, ws);
             } else if (data.type === 'cursor-command') {
                 console.log('🖱️ Cursor message:', data.command || '[Continue/Resume]');
                 console.log('📁 Project:', data.options?.cwd || 'Unknown');
-                console.log('🔄 Session:', data.options?.sessionId ? 'Resume' : 'New');
+                console.log('🔄 Canvas:', data.options?.sessionId ? 'Resume' : 'New');
                 console.log('🤖 Model:', data.options?.model || 'default');
                 await spawnCursor(data.command, data.options, ws);
             } else if (data.type === 'cursor-resume') {
                 // Backward compatibility: treat as cursor-command with resume and no prompt
-                console.log('🖱️ Cursor resume session (compat):', data.sessionId);
+                console.log('🖱️ Cursor resume canvas (compat):', data.sessionId);
                 await spawnCursor('', {
                     sessionId: data.sessionId,
                     resume: true,
                     cwd: data.options?.cwd
                 }, ws);
-            } else if (data.type === 'abort-session') {
-                console.log('🛑 Abort session request:', data.sessionId);
+            } else if (data.type === 'abort-session') { // Note: message type kept for API compatibility - represents abort-canvas
+                console.log('🛑 Abort canvas request:', data.sessionId);
                 const provider = data.provider || 'claude';
                 const success = provider === 'cursor' 
                     ? abortCursorSession(data.sessionId)

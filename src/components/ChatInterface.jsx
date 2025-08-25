@@ -1,19 +1,21 @@
 /*
- * ChatInterface.jsx - Chat Component with Session Protection Integration
+ * ChatInterface.jsx - Chat Component with Canvas Protection Integration
  * 
- * SESSION PROTECTION INTEGRATION:
- * ===============================
+ * CANVAS PROTECTION INTEGRATION:
+ * ==============================
  * 
- * This component integrates with the Session Protection System to prevent project updates
+ * This component integrates with the Canvas Protection System to prevent project updates
  * from interrupting active conversations:
  * 
  * Key Integration Points:
- * 1. handleSubmit() - Marks session as active when user sends message (including temp ID for new sessions)
- * 2. session-created handler - Replaces temporary session ID with real WebSocket session ID  
- * 3. claude-complete handler - Marks session as inactive when conversation finishes
- * 4. session-aborted handler - Marks session as inactive when conversation is aborted
+ * 1. handleSubmit() - Marks canvas as active when user sends message (including temp ID for new canvases)
+ * 2. session-created handler - Replaces temporary canvas ID with real WebSocket canvas ID  
+ * 3. claude-complete handler - Marks canvas as inactive when conversation finishes
+ * 4. session-aborted handler - Marks canvas as inactive when conversation is aborted
  * 
  * This ensures uninterrupted chat experience by coordinating with App.jsx to pause sidebar updates.
+ * 
+ * Note: Internally still uses "session" terminology for API compatibility.
  */
 
 import React, { useState, useEffect, useRef, useMemo, useCallback, memo } from 'react';
@@ -1154,12 +1156,12 @@ const ImageAttachment = ({ file, onRemove, uploadProgress, error }) => {
   );
 };
 
-// ChatInterface: Main chat component with Session Protection System integration
-// 
-// Session Protection System prevents automatic project updates from interrupting active conversations:
-// - onSessionActive: Called when user sends message to mark session as protected
-// - onSessionInactive: Called when conversation completes/aborts to re-enable updates
-// - onReplaceTemporarySession: Called to replace temporary session ID with real WebSocket session ID
+// ChatInterface: Main chat component with Canvas Protection System integration
+//
+// Canvas Protection System prevents automatic project updates from interrupting active conversations:
+// - onSessionActive: Called when user sends message to mark canvas as protected (Note: function name kept for API compatibility)
+// - onSessionInactive: Called when conversation completes/aborts to re-enable updates (Note: function name kept for API compatibility)
+// - onReplaceTemporarySession: Called to replace temporary canvas ID with real WebSocket canvas ID (Note: function name kept for API compatibility)
 //
 // This ensures uninterrupted chat experience by pausing sidebar refreshes during conversations.
 function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, messages, onFileOpen, onInputFocusChange, onSessionActive, onSessionInactive, onReplaceTemporarySession, onNavigateToSession, onShowSettings, autoExpandTools, showRawParameters, autoScrollToBottom, sendByCtrlEnter }) {
@@ -1221,7 +1223,7 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
   const [cursorModel, setCursorModel] = useState(() => {
     return localStorage.getItem('cursor-model') || 'gpt-5';
   });
-  // When selecting a session from Sidebar, auto-switch provider to match session's origin
+  // When selecting a canvas from Sidebar, auto-switch provider to match canvas's origin (Note: variable name kept as "session" for API compatibility)
   useEffect(() => {
     if (selectedSession && selectedSession.__provider && selectedSession.__provider !== provider) {
       setProvider(selectedSession.__provider);
