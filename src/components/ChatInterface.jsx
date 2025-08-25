@@ -25,6 +25,8 @@ import { useDropzone } from 'react-dropzone';
 import TodoList from './TodoList';
 import ClaudeLogo from './ClaudeLogo.jsx';
 import CursorLogo from './CursorLogo.jsx';
+import RovoLogo from './RovoLogo.jsx';
+import GeminiLogo from './GeminiLogo.jsx';
 
 import ClaudeStatus from './ClaudeStatus';
 import { MicButton } from './MicButton.jsx';
@@ -243,13 +245,25 @@ const MessageComponent = memo(({ message, index, prevMessage, createDiff, onFile
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0 p-1">
                   {(localStorage.getItem('selected-provider') || 'claude') === 'cursor' ? (
                     <CursorLogo className="w-full h-full" />
+                  ) : (localStorage.getItem('selected-provider') || 'claude') === 'rovo' ? (
+                    <RovoLogo className="w-full h-full" />
+                  ) : (localStorage.getItem('selected-provider') || 'claude') === 'gemini' ? (
+                    <GeminiLogo className="w-full h-full" />
                   ) : (
                     <ClaudeLogo className="w-full h-full" />
                   )}
                 </div>
               )}
               <div className="text-sm font-medium text-gray-900 dark:text-white">
-                {message.type === 'error' ? 'Error' : message.type === 'tool' ? 'Tool' : ((localStorage.getItem('selected-provider') || 'claude') === 'cursor' ? 'Cursor' : 'Claude')}
+                {message.type === 'error' ? 'Error' : message.type === 'tool' ? 'Tool' : (() => {
+                  const provider = localStorage.getItem('selected-provider') || 'claude';
+                  switch (provider) {
+                    case 'cursor': return 'Cursor';
+                    case 'rovo': return 'Rovo';
+                    case 'gemini': return 'Gemini';
+                    default: return 'Claude';
+                  }
+                })()}
               </div>
             </div>
           )}
@@ -3000,7 +3014,7 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                   Select a provider to start a new conversation
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 justify-center items-center mb-8 max-w-4xl mx-auto">
                   {/* Claude Button */}
                   <button
                     onClick={() => {
@@ -3009,7 +3023,7 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                       // Focus input after selection
                       setTimeout(() => textareaRef.current?.focus(), 100);
                     }}
-                    className={`group relative w-64 h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 hover:scale-105 hover:shadow-xl ${
+                    className={`group relative w-full h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 hover:scale-105 hover:shadow-xl ${
                       provider === 'claude' 
                         ? 'border-blue-500 shadow-lg ring-2 ring-blue-500/20' 
                         : 'border-gray-200 dark:border-gray-700 hover:border-blue-400'
@@ -3041,7 +3055,7 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                       // Focus input after selection
                       setTimeout(() => textareaRef.current?.focus(), 100);
                     }}
-                    className={`group relative w-64 h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 hover:scale-105 hover:shadow-xl ${
+                    className={`group relative w-full h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 hover:scale-105 hover:shadow-xl ${
                       provider === 'cursor' 
                         ? 'border-purple-500 shadow-lg ring-2 ring-purple-500/20' 
                         : 'border-gray-200 dark:border-gray-700 hover:border-purple-400'
@@ -3063,6 +3077,46 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                         </div>
                       </div>
                     )}
+                  </button>
+
+                  {/* Rovo Button */}
+                  <button
+                    disabled
+                    className="group relative w-full h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 opacity-60 cursor-not-allowed border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="flex flex-col items-center justify-center h-full gap-3">
+                      <RovoLogo className="w-10 h-10" />
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-white">Rovo</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">by Atlassian</p>
+                      </div>
+                    </div>
+                    <div className="absolute top-2 right-2">
+                      <div className="w-5 h-5 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">SOON</span>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-20 rounded-xl"></div>
+                  </button>
+
+                  {/* Gemini Button */}
+                  <button
+                    disabled
+                    className="group relative w-full h-32 bg-white dark:bg-gray-800 rounded-xl border-2 transition-all duration-200 opacity-60 cursor-not-allowed border-gray-200 dark:border-gray-700"
+                  >
+                    <div className="flex flex-col items-center justify-center h-full gap-3">
+                      <GeminiLogo className="w-10 h-10" />
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-white">Gemini</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">by Google</p>
+                      </div>
+                    </div>
+                    <div className="absolute top-2 right-2">
+                      <div className="w-5 h-5 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-xs text-white font-bold">SOON</span>
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 bg-gray-100 dark:bg-gray-700 opacity-20 rounded-xl"></div>
                   </button>
                 </div>
                 
@@ -3094,6 +3148,9 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                     ? `Ready to use Cursor with ${cursorModel}. Start typing your message below.`
                     : 'Select a provider above to begin'
                   }
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+                  Rovo and Gemini integrations are coming soon!
                 </p>
               </div>
             )}
@@ -3170,11 +3227,23 @@ function ChatInterface({ selectedProject, selectedSession, ws, sendMessage, mess
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0 p-1 bg-transparent">
                   {(localStorage.getItem('selected-provider') || 'claude') === 'cursor' ? (
                     <CursorLogo className="w-full h-full" />
+                  ) : (localStorage.getItem('selected-provider') || 'claude') === 'rovo' ? (
+                    <RovoLogo className="w-full h-full" />
+                  ) : (localStorage.getItem('selected-provider') || 'claude') === 'gemini' ? (
+                    <GeminiLogo className="w-full h-full" />
                   ) : (
                     <ClaudeLogo className="w-full h-full" />
                   )}
                 </div>
-                <div className="text-sm font-medium text-gray-900 dark:text-white">{(localStorage.getItem('selected-provider') || 'claude') === 'cursor' ? 'Cursor' : 'Claude'}</div>
+                <div className="text-sm font-medium text-gray-900 dark:text-white">{(() => {
+                  const provider = localStorage.getItem('selected-provider') || 'claude';
+                  switch (provider) {
+                    case 'cursor': return 'Cursor';
+                    case 'rovo': return 'Rovo';
+                    case 'gemini': return 'Gemini';
+                    default: return 'Claude';
+                  }
+                })()}</div>
                 {/* Abort button removed - functionality not yet implemented at backend */}
               </div>
               <div className="w-full text-sm text-gray-500 dark:text-gray-400 pl-3 sm:pl-0">
