@@ -20,7 +20,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useParams } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+import AceternitySidebar from './components/AceternitySidebar';
 import MainContent from './components/MainContent';
 import MobileNav from './components/MobileNav';
 import ToolsSettings from './components/ToolsSettings';
@@ -541,72 +541,44 @@ function AppContent() {
     <div className="fixed inset-0 flex bg-background">
       {/* Fixed Desktop Sidebar */}
       {!isMobile && (
-        <div className="w-80 flex-shrink-0 border-r border-border bg-card">
-          <div className="h-full overflow-hidden">
-            <Sidebar
-              projects={projects}
-              selectedProject={selectedProject}
-              selectedSession={selectedSession}
-              onProjectSelect={handleProjectSelect}
-              onSessionSelect={handleSessionSelect}
-              onNewSession={handleNewSession}
-              onSessionDelete={handleSessionDelete}
-              onProjectDelete={handleProjectDelete}
-              isLoading={isLoadingProjects}
-              onRefresh={handleSidebarRefresh}
-              onShowSettings={() => setShowToolsSettings(true)}
-              updateAvailable={updateAvailable}
-              latestVersion={latestVersion}
-              currentVersion={currentVersion}
-              onShowVersionModal={() => setShowVersionModal(true)}
-            />
-          </div>
-        </div>
+        <AceternitySidebar
+          projects={projects}
+          selectedProject={selectedProject}
+          selectedSession={selectedSession}
+          onProjectSelect={handleProjectSelect}
+          onSessionSelect={handleSessionSelect}
+          onNewSession={handleNewSession}
+          onSessionDelete={handleSessionDelete}
+          onProjectDelete={handleProjectDelete}
+          isLoading={isLoadingProjects}
+          onRefresh={handleSidebarRefresh}
+          onShowSettings={() => setShowToolsSettings(true)}
+          updateAvailable={updateAvailable}
+          latestVersion={latestVersion}
+          currentVersion={currentVersion}
+          onShowVersionModal={() => setShowVersionModal(true)}
+        />
       )}
 
-      {/* Mobile Sidebar Overlay */}
+      {/* Mobile Sidebar - Handled by AceternitySidebar */}
       {isMobile && (
-        <div className={`fixed inset-0 z-50 flex transition-all duration-150 ease-out ${
-          sidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-        }`}>
-          <div 
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm transition-opacity duration-150 ease-out"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSidebarOpen(false);
-            }}
-            onTouchStart={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setSidebarOpen(false);
-            }}
-          />
-          <div 
-            className={`relative w-[85vw] max-w-sm sm:w-80 bg-card border-r border-border h-full transform transition-transform duration-150 ease-out ${
-              sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            }`}
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={(e) => e.stopPropagation()}
-          >
-            <Sidebar
-              projects={projects}
-              selectedProject={selectedProject}
-              selectedSession={selectedSession}
-              onProjectSelect={handleProjectSelect}
-              onSessionSelect={handleSessionSelect}
-              onNewSession={handleNewSession}
-              onSessionDelete={handleSessionDelete}
-              onProjectDelete={handleProjectDelete}
-              isLoading={isLoadingProjects}
-              onRefresh={handleSidebarRefresh}
-              onShowSettings={() => setShowToolsSettings(true)}
-              updateAvailable={updateAvailable}
-              latestVersion={latestVersion}
-              currentVersion={currentVersion}
-              onShowVersionModal={() => setShowVersionModal(true)}
-            />
-          </div>
-        </div>
+        <AceternitySidebar
+          projects={projects}
+          selectedProject={selectedProject}
+          selectedSession={selectedSession}
+          onProjectSelect={handleProjectSelect}
+          onSessionSelect={handleSessionSelect}
+          onNewSession={handleNewSession}
+          onSessionDelete={handleSessionDelete}
+          onProjectDelete={handleProjectDelete}
+          isLoading={isLoadingProjects}
+          onRefresh={handleSidebarRefresh}
+          onShowSettings={() => setShowToolsSettings(true)}
+          updateAvailable={updateAvailable}
+          latestVersion={latestVersion}
+          currentVersion={currentVersion}
+          onShowVersionModal={() => setShowVersionModal(true)}
+        />
       )}
 
       {/* Main Content Area - Flexible */}

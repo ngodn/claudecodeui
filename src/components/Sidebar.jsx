@@ -428,8 +428,8 @@ function Sidebar({
               <MessageSquare className="w-4 h-4 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-foreground">Claude Code UI</h1>
-              <p className="text-sm text-muted-foreground">AI coding assistant interface</p>
+              <h1 className="text-lg font-bold text-foreground">The Canvas of Clea</h1>
+              {/* <p className="text-sm text-muted-foreground">AI coding assistant interface</p> */}
             </div>
           </div>
           <div className="flex gap-2">

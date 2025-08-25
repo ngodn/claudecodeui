@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global spinner animation - defined early to ensure it loads */
+/* Global animations - defined early to ensure they load */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -21,50 +21,64 @@
   }
 }
 
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Rose Pine Light Theme */
+    --background: 32 57% 95%; /* #faf4ed */
+    --foreground: 249 12% 47%; /* #575279 */
+    --card: 32 57% 95%; /* #faf4ed */
+    --card-foreground: 249 12% 47%; /* #575279 */
+    --popover: 32 57% 95%; /* #faf4ed */
+    --popover-foreground: 249 12% 47%; /* #575279 */
+    --primary: 197 49% 38%; /* #56949f */
+    --primary-foreground: 32 57% 95%; /* #faf4ed */
+    --secondary: 35 88% 72%; /* #f2e9e1 */
+    --secondary-foreground: 249 12% 47%; /* #575279 */
+    --muted: 35 88% 72%; /* #f2e9e1 */
+    --muted-foreground: 248 12% 52%; /* #797593 */
+    --accent: 10 56% 91%; /* #fffaf3 */
+    --accent-foreground: 249 12% 47%; /* #575279 */
+    --destructive: 343 35% 55%; /* #b4637a */
+    --destructive-foreground: 32 57% 95%; /* #faf4ed */
+    --border: 30 30% 85%; /* #dfdad9 */
+    --input: 30 30% 85%; /* #dfdad9 */
+    --ring: 197 49% 38%; /* #56949f */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 217.2 91.2% 8%;
-    --card-foreground: 210 40% 98%;
-    --popover: 217.2 91.2% 8%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 217.2 91.2% 59.8%;
+    /* Tokyo Night Dark Theme */
+    --background: 230 23% 9%; /* #1a1b26 */
+    --foreground: 224 17% 79%; /* #a9b1d6 */
+    --card: 232 23% 18%; /* #24283b */
+    --card-foreground: 224 17% 79%; /* #a9b1d6 */
+    --popover: 232 23% 18%; /* #24283b */
+    --popover-foreground: 224 17% 79%; /* #a9b1d6 */
+    --primary: 217 92% 76%; /* #7aa2f7 */
+    --primary-foreground: 230 23% 9%; /* #1a1b26 */
+    --secondary: 233 16% 35%; /* #414868 */
+    --secondary-foreground: 224 17% 79%; /* #a9b1d6 */
+    --muted: 233 16% 35%; /* #414868 */
+    --muted-foreground: 226 11% 57%; /* #787c99 */
+    --accent: 233 16% 35%; /* #414868 */
+    --accent-foreground: 224 17% 79%; /* #a9b1d6 */
+    --destructive: 2 86% 69%; /* #f7768e */
+    --destructive-foreground: 230 23% 9%; /* #1a1b26 */
+    --border: 233 16% 35%; /* #414868 */
+    --input: 233 16% 35%; /* #414868 */
+    --ring: 217 92% 76%; /* #7aa2f7 */
   }
 }
 
@@ -77,7 +91,7 @@
   
   body {
     @apply bg-background text-foreground;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Ubuntu", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     padding: 0;
   }
@@ -214,52 +228,52 @@
     background-color: hsl(var(--muted-foreground) / 0.8);
   }
   
-  /* Dark mode scrollbar styles */
+  /* Dark mode scrollbar styles - Tokyo Night */
   .dark .scrollbar-thin {
-    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+    scrollbar-color: rgba(120, 124, 153, 0.5) transparent; /* #787c99 with opacity */
   }
   
   .dark .scrollbar-thin::-webkit-scrollbar-track {
-    background: rgba(31, 41, 55, 0.3);
+    background: rgba(26, 27, 38, 0.3); /* #1a1b26 with opacity */
   }
   
   .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: rgba(120, 124, 153, 0.5); /* #787c99 with opacity */
     border-radius: 3px;
   }
   
   .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(156, 163, 175, 0.7);
+    background-color: rgba(120, 124, 153, 0.7); /* #787c99 with opacity */
   }
   
-  /* Global scrollbar styles for main content areas */
+  /* Global scrollbar styles for main content areas - Tokyo Night */
   .dark::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
   
   .dark::-webkit-scrollbar-track {
-    background: rgba(31, 41, 55, 0.5);
+    background: rgba(26, 27, 38, 0.5); /* #1a1b26 with opacity */
   }
   
   .dark::-webkit-scrollbar-thumb {
-    background-color: rgba(107, 114, 128, 0.5);
+    background-color: rgba(65, 72, 104, 0.5); /* #414868 with opacity */
     border-radius: 4px;
   }
   
   .dark::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(107, 114, 128, 0.7);
+    background-color: rgba(65, 72, 104, 0.7); /* #414868 with opacity */
   }
   
-  /* Firefox scrollbar styles */
+  /* Firefox scrollbar styles - Tokyo Night */
   .dark {
     scrollbar-width: thin;
-    scrollbar-color: rgba(107, 114, 128, 0.5) rgba(31, 41, 55, 0.5);
+    scrollbar-color: rgba(65, 72, 104, 0.5) rgba(26, 27, 38, 0.5); /* #414868, #1a1b26 */
   }
   
-  /* Ensure checkbox styling is preserved */
+  /* Ensure checkbox styling is preserved - Rose Pine accent */
   input[type="checkbox"] {
-    @apply accent-blue-600;
+    accent-color: hsl(var(--primary));
     opacity: 1;
   }
   
@@ -269,164 +283,165 @@
     outline-offset: 2px;
   }
   
-  /* Fix checkbox appearance in dark mode */
+  /* Fix checkbox appearance in dark mode - Tokyo Night */
   .dark input[type="checkbox"] {
-    background-color: rgb(31 41 55); /* gray-800 */
-    border-color: rgb(75 85 99); /* gray-600 */
-    color: rgb(37 99 235); /* blue-600 */
+    background-color: rgb(26 27 38); /* #1a1b26 */
+    border-color: rgb(65 72 104); /* #414868 */
+    accent-color: rgb(122 162 247); /* #7aa2f7 Tokyo Night blue */
     color-scheme: dark;
   }
   
   .dark input[type="checkbox"]:checked {
-    background-color: rgb(37 99 235); /* blue-600 */
-    border-color: rgb(37 99 235); /* blue-600 */
+    background-color: rgb(122 162 247); /* #7aa2f7 */
+    border-color: rgb(122 162 247); /* #7aa2f7 */
   }
   
   .dark input[type="checkbox"]:focus {
-    --tw-ring-color: rgb(59 130 246); /* blue-500 */
-    --tw-ring-offset-color: rgb(31 41 55); /* gray-800 */
+    --tw-ring-color: rgb(122 162 247); /* #7aa2f7 */
+    --tw-ring-offset-color: rgb(26 27 38); /* #1a1b26 */
   }
   
-  /* Fix radio button appearance in dark mode */
+  /* Fix radio button appearance in dark mode - Tokyo Night */
   .dark input[type="radio"] {
-    background-color: rgb(31 41 55); /* gray-800 */
-    border-color: rgb(75 85 99); /* gray-600 */
-    color: rgb(37 99 235); /* blue-600 */
+    background-color: rgb(26 27 38); /* #1a1b26 */
+    border-color: rgb(65 72 104); /* #414868 */
+    accent-color: rgb(122 162 247); /* #7aa2f7 */
     color-scheme: dark;
   }
   
   .dark input[type="radio"]:checked {
-    background-color: rgb(37 99 235); /* blue-600 */
-    border-color: rgb(37 99 235); /* blue-600 */
+    background-color: rgb(122 162 247); /* #7aa2f7 */
+    border-color: rgb(122 162 247); /* #7aa2f7 */
   }
   
   .dark input[type="radio"]:focus {
-    --tw-ring-color: rgb(59 130 246); /* blue-500 */
-    --tw-ring-offset-color: rgb(31 41 55); /* gray-800 */
+    --tw-ring-color: rgb(122 162 247); /* #7aa2f7 */
+    --tw-ring-offset-color: rgb(26 27 38); /* #1a1b26 */
   }
   
-  /* Ensure textarea text is always visible in dark mode */
+  /* Ensure textarea text is always visible in dark mode - Tokyo Night */
   textarea {
     color-scheme: light dark;
   }
   
   .dark textarea {
-    color: rgb(243 244 246) !important; /* gray-100 */
-    -webkit-text-fill-color: rgb(243 244 246) !important;
-    caret-color: rgb(243 244 246) !important;
+    color: rgb(169 177 214) !important; /* #a9b1d6 Tokyo Night foreground */
+    -webkit-text-fill-color: rgb(169 177 214) !important;
+    caret-color: rgb(169 177 214) !important;
   }
   
-  /* Fix for focus state in dark mode */
+  /* Fix for focus state in dark mode - Tokyo Night */
   .dark textarea:focus {
-    color: rgb(243 244 246) !important;
-    -webkit-text-fill-color: rgb(243 244 246) !important;
+    color: rgb(169 177 214) !important; /* #a9b1d6 */
+    -webkit-text-fill-color: rgb(169 177 214) !important;
   }
   
-  /* Fix for iOS/Safari dark mode textarea issues */
+  /* Fix for iOS/Safari dark mode textarea issues - Tokyo Night */
   @supports (-webkit-touch-callout: none) {
     .dark textarea {
       background-color: transparent !important;
-      color: rgb(243 244 246) !important;
-      -webkit-text-fill-color: rgb(243 244 246) !important;
+      color: rgb(169 177 214) !important; /* #a9b1d6 */
+      -webkit-text-fill-color: rgb(169 177 214) !important;
     }
     
     .dark textarea:focus {
       background-color: transparent !important;
-      color: rgb(243 244 246) !important;
-      -webkit-text-fill-color: rgb(243 244 246) !important;
+      color: rgb(169 177 214) !important; /* #a9b1d6 */
+      -webkit-text-fill-color: rgb(169 177 214) !important;
     }
   }
   
-  /* Ensure parent container doesn't override textarea styles */
+  /* Ensure parent container doesn't override textarea styles - Tokyo Night */
   .dark .bg-gray-800 textarea {
-    color: rgb(243 244 246) !important;
-    -webkit-text-fill-color: rgb(243 244 246) !important;
+    color: rgb(169 177 214) !important; /* #a9b1d6 */
+    -webkit-text-fill-color: rgb(169 177 214) !important;
   }
   
-  /* Fix focus-within container issues in dark mode */
+  /* Fix focus-within container issues in dark mode - Tokyo Night */
   .dark .focus-within\:ring-2:focus-within {
-    background-color: rgb(31 41 55) !important; /* gray-800 */
+    background-color: rgb(26 27 38) !important; /* #1a1b26 */
   }
   
-  /* Ensure textarea remains transparent with visible text */
+  /* Ensure textarea remains transparent with visible text - Tokyo Night */
   .dark textarea.bg-transparent {
     background-color: transparent !important;
-    color: rgb(243 244 246) !important;
-    -webkit-text-fill-color: rgb(243 244 246) !important;
+    color: rgb(169 177 214) !important; /* #a9b1d6 */
+    -webkit-text-fill-color: rgb(169 177 214) !important;
   }
   
-  /* Fix placeholder text color to be properly gray */
+  /* Fix placeholder text color - Rose Pine light */
   textarea::placeholder {
-    color: rgb(156 163 175) !important; /* gray-400 */
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
+  /* Dark mode placeholder - Tokyo Night */
   .dark textarea::placeholder {
-    color: rgb(75 85 99) !important; /* gray-600 - darker gray */
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
   }
   
-  /* More specific selector for chat input textarea */
+  /* More specific selector for chat input textarea - Tokyo Night */
   .dark .bg-gray-800 textarea::placeholder,
   .dark textarea.bg-transparent::placeholder {
-    color: rgb(75 85 99) !important; /* gray-600 - darker gray */
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
-    -webkit-text-fill-color: rgb(75 85 99) !important;
+    -webkit-text-fill-color: rgb(120 124 153) !important;
   }
   
   /* Custom class for chat input placeholder */
   .chat-input-placeholder::placeholder {
-    color: rgb(156 163 175) !important;
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
   .dark .chat-input-placeholder::placeholder {
-    color: rgb(75 85 99) !important;
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
-    -webkit-text-fill-color: rgb(75 85 99) !important;
+    -webkit-text-fill-color: rgb(120 124 153) !important;
   }
   
   .chat-input-placeholder::-webkit-input-placeholder {
-    color: rgb(156 163 175) !important;
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
   .dark .chat-input-placeholder::-webkit-input-placeholder {
-    color: rgb(75 85 99) !important;
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
-    -webkit-text-fill-color: rgb(75 85 99) !important;
+    -webkit-text-fill-color: rgb(120 124 153) !important;
   }
   
   /* WebKit specific placeholder styles */
   textarea::-webkit-input-placeholder {
-    color: rgb(156 163 175) !important;
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
   .dark textarea::-webkit-input-placeholder {
-    color: rgb(75 85 99) !important; /* gray-600 - darker gray */
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
   }
   
   /* Mozilla specific placeholder styles */
   textarea::-moz-placeholder {
-    color: rgb(156 163 175) !important;
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
   .dark textarea::-moz-placeholder {
-    color: rgb(75 85 99) !important; /* gray-600 - darker gray */
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
   }
   
   /* IE/Edge specific placeholder styles */
   textarea:-ms-input-placeholder {
-    color: rgb(156 163 175) !important;
+    color: rgb(121 117 147) !important; /* #797593 Rose Pine muted */
     opacity: 1 !important;
   }
   
   .dark textarea:-ms-input-placeholder {
-    color: rgb(75 85 99) !important; /* gray-600 - darker gray */
+    color: rgb(120 124 153) !important; /* #787c99 Tokyo Night muted */
     opacity: 1 !important;
   }
 }
@@ -637,10 +652,10 @@
     -webkit-backface-visibility: hidden;
   }
   
-  /* Improved textarea styling */
+  /* Improved textarea styling - Rose Pine light */
   .chat-input-placeholder {
     scrollbar-width: thin;
-    scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+    scrollbar-color: rgba(121, 117, 147, 0.3) transparent; /* #797593 Rose Pine muted */
   }
   
   .chat-input-placeholder::-webkit-scrollbar {
@@ -653,25 +668,26 @@
   }
   
   .chat-input-placeholder::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.3);
+    background-color: rgba(121, 117, 147, 0.3); /* #797593 Rose Pine muted */
     border-radius: 3px;
     transition: background-color 0.2s;
   }
   
   .chat-input-placeholder::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: rgba(121, 117, 147, 0.5); /* #797593 Rose Pine muted */
   }
   
+  /* Dark mode chat input scrollbar - Tokyo Night */
   .dark .chat-input-placeholder {
-    scrollbar-color: rgba(107, 114, 128, 0.3) transparent;
+    scrollbar-color: rgba(120, 124, 153, 0.3) transparent; /* #787c99 Tokyo Night muted */
   }
   
   .dark .chat-input-placeholder::-webkit-scrollbar-thumb {
-    background-color: rgba(107, 114, 128, 0.3);
+    background-color: rgba(120, 124, 153, 0.3); /* #787c99 Tokyo Night muted */
   }
   
   .dark .chat-input-placeholder::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(107, 114, 128, 0.5);
+    background-color: rgba(120, 124, 153, 0.5); /* #787c99 Tokyo Night muted */
   }
   
   /* Enhanced box shadow when textarea expands */
@@ -683,14 +699,14 @@
     box-shadow: 0 -5px 15px -3px rgba(0, 0, 0, 0.3), 0 -4px 6px -2px rgba(0, 0, 0, 0.2);
   }
   
-  /* Fix focus ring offset color in dark mode */
+  /* Fix focus ring offset color in dark mode - Tokyo Night */
   .dark [class*="ring-offset"] {
-    --tw-ring-offset-color: rgb(31 41 55); /* gray-800 */
+    --tw-ring-offset-color: rgb(26 27 38); /* #1a1b26 Tokyo Night background */
   }
   
-  /* Ensure buttons don't show white backgrounds in dark mode */
+  /* Ensure buttons don't show white backgrounds in dark mode - Tokyo Night */
   .dark button:focus {
-    --tw-ring-offset-color: rgb(31 41 55); /* gray-800 */
+    --tw-ring-offset-color: rgb(26 27 38); /* #1a1b26 Tokyo Night background */
   }
   
   /* Fix mobile select dropdown styling */
@@ -701,9 +717,9 @@
     }
   }
   
-  /* Improve select appearance in dark mode */
+  /* Improve select appearance in dark mode - Tokyo Night */
   .dark select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23787c99' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
@@ -713,8 +729,9 @@
     appearance: none;
   }
   
+  /* Light mode select - Rose Pine */
   select {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23797593' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 0.5rem center;
     background-size: 1.5em 1.5em;
@@ -728,12 +745,13 @@
   select option {
     font-size: 16px !important;
     padding: 8px !important;
-    background-color: var(--background) !important;
-    color: var(--foreground) !important;
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
   }
   
+  /* Dark mode select options - Tokyo Night */
   .dark select option {
-    background-color: rgb(31 41 55) !important;
-    color: rgb(243 244 246) !important;
+    background-color: rgb(26 27 38) !important; /* #1a1b26 Tokyo Night background */
+    color: rgb(169 177 214) !important; /* #a9b1d6 Tokyo Night foreground */
   }
 }
